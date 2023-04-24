@@ -10,6 +10,11 @@ def main():
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     tmr = 0
 
+    bom_screen = pg.Surface((20,20))
+    bom_screen.set_colorkey(0)
+    pg.draw.circle(bom_screen,(255,0,0),(10,10),10)
+
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
