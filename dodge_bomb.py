@@ -10,10 +10,10 @@ def main():
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     tmr = 0
 
-    bom_screen = pg.Surface((20,20))
+    bom_screen = pg.Surface((20,20))    #爆弾の作成
     bom_screen.set_colorkey(0)
     pg.draw.circle(bom_screen,(255,0,0),(10,10),10)
-    bom = bom_screen.get_rect(center=(10,10))
+    bom = bom_screen.get_rect(center=(random.randint(160,1420),random.randint(90,790)))
 
 
     while True:
@@ -24,7 +24,7 @@ def main():
         tmr += 1
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
-        screen.blit(bom_screen,[bom])
+        screen.blit(bom_screen,bom)
 
         pg.display.update()
         clock.tick(1000)
