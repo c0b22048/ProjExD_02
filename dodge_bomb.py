@@ -85,8 +85,8 @@ def main():
 
         screen.blit(bom_screen,bb_rect)
 
-        #if kk_rect.colliderect(bb_rect):  #==書かない
-            #return 
+        if kk_rect.colliderect(bb_rect):  #==書かない
+            return 
 
 
      
