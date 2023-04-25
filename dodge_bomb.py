@@ -11,6 +11,8 @@ delta = {
         }
 
 
+accs = [a for a in range(1, 11)]
+
 
 def check_bound(scr_rect:pg.Rect,obj_rect:pg.Rect) -> tuple[bool,bool]:  #引数にpg.Rectを付け加えると関数内でrectクラスの.topとかが認識される。
     """
@@ -28,6 +30,7 @@ def check_bound(scr_rect:pg.Rect,obj_rect:pg.Rect) -> tuple[bool,bool]:  #引数
     
 
 
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((1600, 900))
@@ -35,6 +38,8 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_img_end = pg.image.load("ex02/fig/6.png")
+    kk_img_end = pg.transform.rotozoom(kk_img_end, 0, 2.0)
     tmr = 0
 
     bom_screen = pg.Surface((20, 20))    #爆弾の作成
@@ -50,7 +55,16 @@ def main():
 
 
 
-
+    kk_muki = {
+        (0, -1):pg.transform.rotozoom(kk_img, 90, 1.0),  #工科トンの向き
+        (+1, -1):pg.transform.rotozoom(kk_img, 45, 1.0),
+        (+1, 0):pg.transform.rotozoom(kk_img, 0, 1.0),
+        (+1, +1):pg.transform.rotozoom(kk_img, -45, 1.0),
+        (0, +1):pg.transform.rotozoom(kk_img, -90, 1.0),
+        (-1, +1):pg.transform.rotozoom(kk_img, -135, 1.0),
+        (-1, 0):pg.transform.rotozoom(kk_img, 180, 1.0),
+        (-1, -1):pg.transform.rotozoom(kk_img, 135, 1.0),
+            }
 
     while True:
         for event in pg.event.get():
@@ -59,21 +73,18 @@ def main():
 
         tmr += 1
 
-        key_list = pg.key.get_pressed()
+        key_list = pg.key.get_pressed()  
         for k , mv in delta.items():
             if key_list[k]:
                 kk_rect.move_ip(mv)
+            #if kk_muki[mv]:
 
         if check_bound(screen.get_rect(),kk_rect) != (True,True):  ##（True,True）ははみ出てない状態
             for k , mv in delta.items():
                 if key_list[k]:
                     kk_rect.move_ip(-mv[0], -mv[1])  #逆向きにするため-mvにする
 
-
-
-
-        screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img, kk_rect)
+        screen.blit(bg_img, [0, 0])  #
 
         bb_rect.move_ip(vx, vy)
 
@@ -86,14 +97,14 @@ def main():
         screen.blit(bom_screen,bb_rect)
 
         if kk_rect.colliderect(bb_rect):  #==書かない
-            return 
+            screen.blit(kk_img_end,kk_rect)
 
-
-     
+            #return  
+        else:
+            screen.blit(kk_img, kk_rect) 
     
         pg.display.update()
         clock.tick(1000)
-
 
 
 if __name__ == "__main__":
