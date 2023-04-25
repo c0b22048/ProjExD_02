@@ -29,13 +29,11 @@ def check_bound(scr_rect:pg.Rect,obj_rect:pg.Rect) -> tuple[bool,bool]:  #引数
     return yoko, tate
     
 
-
-
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((1600, 900))
     clock = pg.time.Clock()
-    bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
+    bg_img = pg.image.load("ex02/fig/pg_bg.jpg") 
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_img_end = pg.image.load("ex02/fig/6.png")
@@ -52,7 +50,6 @@ def main():
     bb_rect.center=bx, by  #爆弾の初期位置をx,yに設定
     kk_rect=kk_img.get_rect()  #こうかとんをsurfaceからrectに変化
     kk_rect.center=900, 400  #こうかとんの初期位置の値
-
 
 
     kk_muki = {
