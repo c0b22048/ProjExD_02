@@ -11,6 +11,23 @@ delta = {
         }
 
 
+
+def check_bound(scr_rect:pg.Rect,obj_rect:pg.Rect) -> tuple[bool,bool]:  #引数にpg.Rectを付け加えると関数内でrectクラスの.topとかが認識される。
+    """
+    オブジェクトが画面内or画面外を判定し、真理値タプルを返す関数
+    引数１：画面surfaceのrect
+    引数２：こうかとん、または爆弾surfaceのrect
+    戻り値：横方向、縦方向のはみだし判定結果(画面内：True/画面外:False)
+    """
+    yoko, tate = True, True
+    if obj_rect.left < scr_rect.left or scr_rect.right < obj_rect.right :
+        yoko = False
+    if obj_rect.top < scr_rect.top or scr_rect.bottom  < obj_rect.bottom :
+        tate = False
+    return yoko, tate
+    
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((1600, 900))
@@ -21,8 +38,7 @@ def main():
     tmr = 0
 
     bom_screen = pg.Surface((20, 20))    #爆弾の作成
-    vx = 0
-    vy = 0
+    vx, vy = +1, +1
     bom_screen.set_colorkey(0)
     pg.draw.circle(bom_screen,(255, 0, 0), (10, 10), 10)
     bx = random.randint(160, 1420)
@@ -48,23 +64,37 @@ def main():
             if key_list[k]:
                 kk_rect.move_ip(mv)
 
+        if check_bound(screen.get_rect(),kk_rect) != (True,True):  ##（True,True）ははみ出てない状態
+            for k , mv in delta.items():
+                if key_list[k]:
+                    kk_rect.move_ip(-mv[0], -mv[1])  #逆向きにするため-mvにする
+
 
 
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rect)
-        #bom_rect = bom_screen.get_rect(center=(vx,vy))
-        screen.blit(bom_screen,bb_rect)
+
         bb_rect.move_ip(vx, vy)
-        vx, vy = +1, +1
+
+        yoko, tate = check_bound(screen.get_rect(), bb_rect)
+        if not yoko:  #横方向に爆弾がはみ出たら
+            vx *= -1
+        if not tate:  #縦方向に爆弾がはみ出たら
+            vy *= -1
+
+        screen.blit(bom_screen,bb_rect)
+
+        #if kk_rect.colliderect(bb_rect):  #==書かない
+            #return 
+
 
      
     
         pg.display.update()
         clock.tick(1000)
 
-        #if key_lst[pg.K_DOWN]:
-            #kk_img.move_ip(key_lst[pg.K_DOWN])
+
 
 if __name__ == "__main__":
     pg.init()
